@@ -30,16 +30,5 @@ public class CriptografiaAES {
         byte[] textoDescriptografado = cipher.doFinal(textoBytes);
         return new String(textoDescriptografado, "UTF-8");
     }
-    // public static void main(String[] args) {
-    // try {
-    // String textoOriginal = "Oi leo seu lindo";
-    // String textoCriptografado = criptografar(textoOriginal);
-    // System.out.println("Texto criptografado: " + textoCriptografado);
 
-    // String textoDescriptografado = descriptografar(textoCriptografado);
-    // System.out.println("Texto descriptografado: " + textoDescriptografado);
-    // } catch (Exception e) {
-    // e.printStackTrace();
-    // }
-    // }
 }

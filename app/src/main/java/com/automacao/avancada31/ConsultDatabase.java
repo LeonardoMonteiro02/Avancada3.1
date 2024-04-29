@@ -230,8 +230,8 @@ public class ConsultDatabase extends Thread {
             boolean verifica = false;
             for (int i = 0; i < listaBD.size(); i++) {
                 if (listaBD.get(i).getClass().equals(Region.class)) { //Verifica se alguma região(Region) do banco esta a mesnos de 30 metros de distancia do novo dado
-                    double distancia = listaBD.get(i).calculateDistance(listaBD.get(i).getLatitude(), listaBD.get(i).getLongitude(), newlatitude, newlongitude);
-                    if (distancia < 30) {
+                    boolean distancia = listaBD.get(i).calculateDistance(listaBD.get(i).getLatitude(), listaBD.get(i).getLongitude(), newlatitude, newlongitude);
+                    if (distancia == false) {
                         verifica = true;
                         break; // Se encontrarmos uma região a menos de 30 metros, podemos sair do loop
                     }
@@ -249,9 +249,9 @@ public class ConsultDatabase extends Thread {
     private void verificaBanco(List<Region> listaBD) {
         int indexRegiaoMenorQue30 = -1;
         for (int i = 0; i < listaBD.size(); i++) {
-            if ("Region".equals(nomeSimplesUltimoElemento(listaBD, i))) {
-                double distancia = listaBD.get(i).calculateDistance(listaBD.get(i).getLatitude(), listaBD.get(i).getLongitude(), newlatitude, newlongitude);
-                if (distancia < 30) {
+            if (listaBD.get(i) instanceof Region) {
+                boolean distancia = listaBD.get(i).calculateDistance(listaBD.get(i).getLatitude(), listaBD.get(i).getLongitude(), newlatitude, newlongitude);
+                if (distancia == false) {
                     indexRegiaoMenorQue30 = i;
                     break;
                 }
@@ -267,9 +267,9 @@ public class ConsultDatabase extends Thread {
                 boolean avalia = false;
                 int posUltimoElementoAssociadoaRegion = -1;
                 for (int i = indexRegiaoMenorQue30 +1; i < listaBD.size(); i++) {
-                    if (("SubRegion".equals(nomeSimplesUltimoElemento(listaBD, i))) || ("RestrictedRegion".equals(nomeSimplesUltimoElemento(listaBD, i)))) {
-                        double distancia = listaBD.get(i).calculateDistance(listaBD.get(i).getLatitude(), listaBD.get(i).getLongitude(), newlatitude, newlongitude);
-                        if (distancia < 5) {
+                    if ((listaBD.get(i) instanceof SubRegion) || (listaBD.get(i) instanceof RestrictedRegion)) {
+                        boolean distancia = listaBD.get(i).calculateDistance(listaBD.get(i).getLatitude(), listaBD.get(i).getLongitude(), newlatitude, newlongitude);
+                        if (distancia == false) {
                             avalia = true;
                             break;
                         }
@@ -296,13 +296,13 @@ public class ConsultDatabase extends Thread {
     }
 
     private void verificaTipo(List<Region> listaBD, int index) {
-        if ("SubRegion".equals(nomeSimplesUltimoElemento(listaBD, index))) {
+        if (listaBD.get(index) instanceof SubRegion){
             Log.d("Consulta Banco de Dados", " Adicionando RestrictedRegion");
             SubRegion subregion = (SubRegion)listaBD.get(index);
             Region mainRegion = subregion.getMainRegion();
             RegionUpdaterThread thread = new RegionUpdaterThread(regions,listaBD,index, newName, newlatitude, newlongitude, semaphore, true, mainRegion);
             thread.start();
-        } else  if ("RestrictedRegion".equals(nomeSimplesUltimoElemento(listaBD, index))){
+        } else  if (listaBD.get(index) instanceof RestrictedRegion){
             Log.d("Consulta Banco de Dados", " Adicionando SubRegion");
             RestrictedRegion restrictedRegion = (RestrictedRegion) listaBD.get(index);
             Region mainRegion = restrictedRegion.getMainRegion();
@@ -330,4 +330,3 @@ public class ConsultDatabase extends Thread {
 
 
 }
-

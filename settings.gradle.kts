@@ -17,10 +17,10 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven {
-            url = uri("https://maven.pkg.github.com/LeonardoMonteiro02/Avancada3.0/tree/Leonardo")
+            url = uri("https://maven.pkg.github.com/LeonardoMonteiro02/Avancada3.0")
             credentials {
                 username = "LeonardoMonteiro02"
-                password = "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"
+                password = "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"
             }
         }
     }

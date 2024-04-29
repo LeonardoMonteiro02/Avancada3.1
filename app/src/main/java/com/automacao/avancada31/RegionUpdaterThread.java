@@ -205,10 +205,10 @@ public class RegionUpdaterThread extends Thread {
     private void verificaLista(List<Region> lista) {
         int indexRegiaoMenorQue30 = -1;
         for (int i = 0; i < lista.size(); i++) {
-            if ("Region".equals(nomeSimplesUltimoElemento(lista, i))) {
-                double distancia = lista.get(i).calculateDistance(lista.get(i).getLatitude(), lista.get(i).getLongitude(), newlatitude, newlongitude);
+            if (lista.get(i) instanceof Region) {
+                boolean distancia = lista.get(i).calculateDistance(lista.get(i).getLatitude(), lista.get(i).getLongitude(), newlatitude, newlongitude);
                 Log.d("Consulta Lista", "Distância da região " + i + " : " + distancia + " metros.");
-                if (distancia < 30) {
+                if (distancia == false) {
                     indexRegiaoMenorQue30 = i;
                     break;
                 }
@@ -227,10 +227,10 @@ public class RegionUpdaterThread extends Thread {
                 boolean avalia = false;
                 int posUltimoElementoAssociadoaRegion = -1;
                 for (int i = indexRegiaoMenorQue30 +1; i < lista.size(); i++) {
-                    if (("SubRegion".equals(nomeSimplesUltimoElemento(lista, i))) || ("RestrictedRegion".equals(nomeSimplesUltimoElemento(lista, i)))) {
-                        double distancia = lista.get(i).calculateDistance(lista.get(i).getLatitude(), lista.get(i).getLongitude(), newlatitude, newlongitude);
+                    if ((lista.get(i) instanceof SubRegion) || (lista.get(i) instanceof RestrictedRegion)) {
+                       boolean distancia = lista.get(i).calculateDistance(lista.get(i).getLatitude(), lista.get(i).getLongitude(), newlatitude, newlongitude);
                         Log.d("Consulta Lista", "Distância do elemento após região " + indexRegiaoMenorQue30 + " : " + distancia + " metros.");
-                        if (distancia < 5) {
+                        if (distancia == false) {
                             avalia = true;
                             break;
                         }
@@ -262,7 +262,7 @@ public class RegionUpdaterThread extends Thread {
     }
 
     private void verificaTipo(List<Region> lista, int index) {
-        if ("SubRegion".equals(nomeSimplesUltimoElemento(lista, index))) {
+        if (lista.get(index) instanceof SubRegion) {
             Log.d("Consulta Lista", "Adicionando RestrictedRegion");
             SubRegion subregion = (SubRegion)lista.get(index);
             Region mainRegion = subregion.getMainRegion();
@@ -270,7 +270,7 @@ public class RegionUpdaterThread extends Thread {
             regions.add(index +1,restrictedRegion);
             System.out.println("Elementos da lista:");
             imprimirElementos(regions);
-        } else if ("RestrictedRegion".equals(nomeSimplesUltimoElemento(lista, index))){
+        } else if (lista.get(index) instanceof RestrictedRegion){
             Log.d("Consulta Lista", "Adicionando SubRegion");
             RestrictedRegion restrictedRegion = (RestrictedRegion) lista.get(index);
             Region mainRegion = restrictedRegion.getMainRegion();
