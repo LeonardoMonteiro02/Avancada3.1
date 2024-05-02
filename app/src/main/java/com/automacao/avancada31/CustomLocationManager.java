@@ -45,6 +45,9 @@ public class CustomLocationManager {
     private LocationCallbackListener callbackListener;
     private Handler handler;
     private Context context;
+    private long startTime;
+    private long endTime;
+    private boolean isTimerRunning;
 
     public CustomLocationManager(Context context) {
         this.context = context;
@@ -73,15 +76,21 @@ public class CustomLocationManager {
      * Se a permissão não foi concedida, registra uma mensagem de log informando que a permissão de localização não foi concedida.
      */
     public void startLocationUpdatesInBackground() {
+        // Inicializa o temporizador
+
         new Thread(() -> {
             Looper.prepare(); // Prepara o Looper para processar mensagens de localização
             if (checkLocationPermission()) { // Verifica se a permissão de localização foi concedida
                 Log.d(TAG, "Location permission granted. Starting location updates..."); // Registra uma mensagem de log informando que a permissão de localização foi concedida
                 startLocationUpdates(); // Inicia as atualizações de localização
+               // Log.d(TAG, "fim da autalalização.");
+
             } else {
                 Log.d(TAG, "Location permission not granted."); // Registra uma mensagem de log informando que a permissão de localização não foi concedida
             }
             Looper.loop(); // Inicia o loop do Looper para processar mensagens de localização
+            // Encerra o temporizador quando o loop do Looper terminar
+
         }).start(); // Inicia a nova thread
     }
 
@@ -181,10 +190,21 @@ public class CustomLocationManager {
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 if (locationResult != null) { // Verifica se o objeto LocationResult não é nulo
+                    // Registra o tempo de início ao receber a atualização de localização
+                    long startTime = System.nanoTime();
+
                     final Location location = locationResult.getLastLocation(); // Obtém a última localização do objeto LocationResult
                     if (location != null && callbackListener != null) { // Verifica se a localização não é nula e se o callbackListener não é nulo
-                        handler.post(() -> callbackListener.onNewLocationReceived(location)); // Envia a nova localização recebida para o callbackListener usando um Handler
+                        // Envie a nova localização recebida para o callbackListener usando um Handler
+                        handler.post(() -> callbackListener.onNewLocationReceived(location));
                     }
+
+                    // Registra o tempo de término após receber a atualização de localização
+                    long endTime = System.nanoTime();
+                    // Calcula o tempo decorrido em milissegundos
+                    long elapsedTime = endTime - startTime;
+                    // Use o tempo decorrido conforme necessário, como registrá-lo em logs ou realizar outras ações
+                   // Log.d(TAG, "Tempo decorrido da atualização da localização: " + elapsedTime + " nanosegundos");
                 }
             }
         };

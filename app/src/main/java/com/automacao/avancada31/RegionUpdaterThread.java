@@ -104,7 +104,7 @@ public class RegionUpdaterThread extends Thread {
      */
     @Override
     public void run() {
-
+        long startTime = System.nanoTime();
         // Adquira a permissão do semáforo antes de acessar a lista
         try {
             semaphore.acquire();
@@ -114,6 +114,12 @@ public class RegionUpdaterThread extends Thread {
 
         avaliaDados();
 
+        // Registra o tempo de término do salvamento
+        long endTime = System.nanoTime();
+        // Calcula o tempo decorrido em nanossegundos
+        long elapsedTime = endTime - startTime;
+        // Use o tempo decorrido conforme necessário, como registrá-lo em logs ou realizar outras ações
+        Log.d("Consulta Lista", "Tempo decorrido para Salvar na lista " + elapsedTime + " nanossegundos");
 
     }
 
@@ -300,7 +306,7 @@ public class RegionUpdaterThread extends Thread {
     public static void imprimirElementos(List<Region> lista) {
 
         for (Region elemento : lista) {
-            Log.d("Consulta Lista", "Tipo: " + nomeSimplesUltimoElemento(lista, lista.lastIndexOf(elemento)));
+            Log.d("Consulta Lista", "Tipo: " + lista.get(lista.lastIndexOf(elemento)));
         }
     }
     public static <T> int buscarIndiceElemento(List<T> lista, T elemento) {

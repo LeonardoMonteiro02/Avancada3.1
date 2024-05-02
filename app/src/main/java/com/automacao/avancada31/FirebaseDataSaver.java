@@ -80,17 +80,33 @@ public class FirebaseDataSaver extends Thread {
     }
 
     private void saveData() {
+        long startTime = System.nanoTime();
         String encryptedJson;
         DatabaseReference regiao = referencia.child("regioes");
 
 
         for (Region region : regions) {
-            encryptedJson = JsonConverter.objectToJsonEncrypted(region);
+            JsonConverter jsoncriptografado = new JsonConverter(region,true);
+            jsoncriptografado.start();
+            try {
+                jsoncriptografado.join();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+            encryptedJson = jsoncriptografado.datacriptografado();
             regiao.child(String.valueOf(i)).setValue(encryptedJson);
             i++;
         }
         i=0;
         regions.clear(); // Clear list after successful saving
         Log.d(TAG, "Dados Salvos no Servidor!");
+
+        // Registra o tempo de término para salvar no banco
+        long endTime = System.nanoTime();
+        // Calcula o tempo decorrido em milissegundos
+        long elapsedTime = endTime - startTime;
+        // Use o tempo decorrido conforme necessário, como registrá-lo em logs ou realizar outras ações
+         Log.d(TAG, "Tempo decorrido para salvar no banco: " + elapsedTime + " nanosegundos");
     }
 }
