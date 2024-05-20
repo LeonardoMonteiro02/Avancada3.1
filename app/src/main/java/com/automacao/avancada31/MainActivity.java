@@ -194,14 +194,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-    /**
-     * Atualiza o mapa com a localização atual do dispositivo.
-     * Verifica se o mapa está disponível e, se estiver, atualiza o marcador da localização atual
-     * para refletir a nova posição. Se o marcador ainda não existe, ele é criado e adicionado ao mapa.
-     * Em seguida, move a câmera do mapa para a nova posição com um nível de zoom específico.
-     *
-     * @param location A localização atual do dispositivo.
-     */
+
     private void updateMap(Location location) {
         // Verifica se o mapa está disponível
         if (mMap != null) {
@@ -224,13 +217,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
-    /**
-     * Inicia a atividade de autocompletar para permitir que o usuário selecione um local.
-     * Define os campos para especificar quais tipos de dados de local devem ser retornados
-     * após o usuário fazer uma seleção. Em seguida, inicia a intenção de autocompletar,
-     * que permite ao usuário pesquisar e selecionar um local. O resultado é retornado através
-     * do método onActivityResult com o código de solicitação AUTOCOMPLETE_REQUEST_CODE.
-     */
+
     private void startAutocompleteActivity() {
         // Defina os campos para especificar quais tipos de dados de local devem ser retornados após o usuário fazer uma seleção.
         List<com.google.android.libraries.places.api.model.Place.Field> fields = Arrays.asList(com.google.android.libraries.places.api.model.Place.Field.ID, com.google.android.libraries.places.api.model.Place.Field.NAME);
@@ -244,18 +231,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
-    /**
-     * Método chamado quando o resultado de uma atividade é retornado.
-     * Verifica se o resultado corresponde à solicitação de autocompletar.
-     * Se for, verifica se a operação foi concluída com sucesso.
-     * Se for bem-sucedida, obtém o local selecionado do intent e atualiza o TextView com o nome do local.
-     * Se houver um erro durante a operação de autocompletar, ele pode ser tratado aqui.
-     * Se o usuário cancelou a operação, não é realizada nenhuma ação adicional.
-     *
-     * @param requestCode O código de solicitação original enviado para a atividade.
-     * @param resultCode  O código de resultado devolvido pela atividade filho.
-     * @param data        O intent que contém o resultado da atividade.
-     */
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -280,13 +256,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
-    /**
-     * Atualiza os TextViews que exibem a latitude e longitude da localização atual.
-     * Formata os valores de latitude e longitude e os define nos TextViews correspondentes.
-     *
-     * @param latitude  A latitude atual.
-     * @param longitude A longitude atual.
-     */
+
     private void updateCurrentLocationTextViews(double latitude, double longitude) {
         // Formata os valores de latitude e longitude e os define nos TextViews correspondentes.
         currentLatTextView.setText("Lat: " + String.format("%.7f", latitude));
@@ -294,19 +264,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-    /**
-     * Salva a localização atual na lista de regiões.
-     * Verifica se o marcador da localização atual não é nulo.
-     * Se não for nulo, extrai as coordenadas de latitude e longitude dos TextViews correspondentes.
-     * Em seguida, obtém o nome da região usando o serviço de geocodificação.
-     * Se o nome da região estiver disponível, adiciona a região à lista de regiões acessada através da MainActivity,
-     * iniciando uma nova thread para realizar esta operação.
-     * Espera até que a thread termine sua execução antes de continuar.
-     * Se o nome da região não estiver disponível, exibe um Toast informando sobre a indisponibilidade.
-     * Se a localização atual não estiver disponível, exibe um Toast informando sobre a indisponibilidade.
-     *
-     * @throws InterruptedException Se ocorrer uma interrupção enquanto aguarda a conclusão da thread.
-     */
+
     private void saveCurrentLocationToRegionsList() throws InterruptedException {
         // Verifica se o marcador da localização atual não é nulo
         if (currentLocationMarker != null) {
@@ -344,16 +302,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
-    /**
-     * Salva a localização atual no Firebase.
-     * Verifica se o marcador da localização atual não é nulo.
-     * Se não for nulo e a thread FirebaseDataSaver não estiver em execução, cria uma nova instância de FirebaseDataSaver,
-     * vinculando-a à lista de regiões acessada através da MainActivity, e inicia sua execução em uma nova thread.
-     * Se a thread já estiver em execução, registra uma mensagem de log.
-     * Em seguida, notifica a thread quando a lista de regiões não estiver mais vazia.
-     * Exibe um Toast para informar o usuário sobre a ação realizada.
-     * Se a localização atual não estiver disponível, exibe um Toast informando ao usuário.
-     */
     private void saveCurrentLocationToFirebase() {
         // Verifica se o marcador da localização atual não é nulo
         if (currentLocationMarker != null) {
@@ -383,17 +331,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
-    /**
-     * Obtém o nome da região a partir das coordenadas de latitude e longitude.
-     * Utiliza um objeto Geocoder para realizar uma consulta reversa e obter o endereço correspondente.
-     * Primeiro, tenta obter o endereço usando o método getFromLocation().
-     * Se a primeira tentativa falhar, aguarda por 1 segundo e tenta novamente.
-     * Se a segunda tentativa também falhar, retorna uma string vazia.
-     *
-     * @param latitude  A latitude das coordenadas.
-     * @param longitude A longitude das coordenadas.
-     * @return O nome da região correspondente às coordenadas ou uma string vazia se não puder ser obtido.
-     */
     private String getRegionNameFromCoordinates(double latitude, double longitude) {
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         String fullAddress = "";

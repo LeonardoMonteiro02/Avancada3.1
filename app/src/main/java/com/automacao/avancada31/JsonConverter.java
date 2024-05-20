@@ -2,6 +2,8 @@ package com.automacao.avancada31;
 
 
 
+import android.util.Log;
+
 import com.example.biblioteca.Region;
 import com.example.biblioteca.RestrictedRegion;
 import com.example.biblioteca.SubRegion;
@@ -40,6 +42,7 @@ public class JsonConverter extends Thread {
     // Sobrescrevendo o método run() da classe Thread
     @Override
     public void run() {
+
         // Verifica se deve converter para JSON ou para objeto
         if (convertToJson) {
             // Se convertToJson for true, chama o método para converter objeto para JSON
@@ -50,6 +53,7 @@ public class JsonConverter extends Thread {
             jsonToObjectDecrypted(encryptedData);
 
         }
+
     }
 
     private static String objectToJsonEncrypted(Object obj) {

@@ -1,18 +1,4 @@
-/**
- * Adaptador responsável por fornecer sugestões de autocompletar para um campo de texto baseado em locais.
- *
- * Este adaptador extende ArrayAdapter<String> e implementa Filterable para fornecer funcionalidade de autocompletar.
- * Utiliza o Places API da Google para buscar previsões de autocompletar com base no texto de restrição fornecido.
- *
- * Principais funcionalidades:
- * - Fornecimento de previsões de autocompletar com base na consulta de pesquisa fornecida.
- * - Implementação de um filtro para o AutoCompleteTextView que executa a filtragem de previsões de autocompletar com base no texto de restrição fornecido.
- * - Utilização de Tasks para buscar previsões de autocompletar de forma assíncrona e aguardar o resultado da tarefa por até 30 segundos.
- * - Registro de erros no log e exibição de Toasts em caso de exceções durante a execução da tarefa de busca de previsões de autocompletar.
- *
- * Autor: Leonardo Monteiro
- * Data: 05/04/2024
- */
+
 
 
 package com.automacao.avancada31;
@@ -62,14 +48,6 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
     }
 
     @Override
-    /**
-     * Obtém o filtro para o AutoCompleteTextView.
-     * Retorna um novo filtro que executa a filtragem de previsões de autocompletar com base no texto de restrição fornecido.
-     * Se o texto de restrição não for nulo, chama o método getAutocomplete() para obter previsões de autocompletar com base no texto de restrição.
-     * Define os resultados do filtro com as novas previsões e seu número correspondente.
-     * Se houver resultados válidos, atualiza a lista de previsões e notifica o adaptador para atualizar a exibição.
-     * Se não houver resultados válidos, notifica o adaptador que o conjunto de dados é inválido.
-     */
     public Filter getFilter() {
         return new Filter() {
             @Override
@@ -96,15 +74,7 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
     }
 
 
-    /**
-     * Obtém previsões de autocompletar para uma consulta de pesquisa fornecida.
-     * Cria uma nova lista para armazenar as previsões de autocompletar.
-     * Cria uma tarefa para buscar previsões de autocompletar com base na consulta de pesquisa fornecida.
-     * Tenta aguardar o resultado da tarefa por até 30 segundos.
-     * Se a resposta não for nula, itera sobre as previsões de autocompletar na resposta e as adiciona à lista de previsões.
-     * Se ocorrer uma exceção durante a execução da tarefa, registra um erro no log e exibe um Toast informando sobre o erro.
-     * Retorna a lista de previsões de autocompletar.
-     */
+
     private List<String> getAutocomplete(@NonNull String query) {
         List<String> predictionsList = new ArrayList<>(); // Cria uma nova lista para armazenar as previsões de autocompletar
         Task<FindAutocompletePredictionsResponse> task = placesClient.findAutocompletePredictions(com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest.builder()

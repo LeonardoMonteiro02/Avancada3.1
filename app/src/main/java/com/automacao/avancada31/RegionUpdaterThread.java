@@ -1,18 +1,3 @@
-/**
- * Classe responsável por atualizar a lista de regiões com base em novos dados de localização.
- *
- * Esta classe implementa uma thread que executa a lógica para adicionar uma nova região à lista de regiões.
- * Ao receber uma nova localização, adquire a permissão de um semáforo antes de acessar a lista de regiões.
- * Verifica se a região já existe na lista. Se não existir, verifica se a nova região está a menos de 30 metros de distância de outras regiões na lista.
- * Se a nova região não estiver muito próxima, cria um objeto Region com os dados da localização e o adiciona à lista de regiões.
- * Registra mensagens no log para indicar as ações realizadas ou situações encontradas.
- * Libera a permissão do semáforo após acessar a lista de regiões.
- * Utiliza uma classe GeoCalculator para calcular a distância entre a nova região e as regiões existentes na lista.
- *
- * Autor: Leonardo Monteiro
- * Data: 05/04/2024
- */
-
 
 package com.automacao.avancada31;
 
@@ -94,14 +79,7 @@ public class RegionUpdaterThread extends Thread {
 
     }
 
-    /**
-     * Executa a lógica para adicionar uma nova região à lista de regiões.
-     * Adquire a permissão do semáforo antes de acessar a lista.
-     * Verifica se a região já existe na lista. Se não existir, verifica se a nova região está a menos de 30 metros de distância de outras regiões na lista.
-     * Se não estiver muito próxima, cria um objeto Region com os dados da localização e o adiciona à lista de regiões.
-     * Registra mensagens no log para indicar as ações realizadas ou situações encontradas.
-     * Finalmente, libera a permissão do semáforo após acessar a lista.
-     */
+
     @Override
     public void run() {
         long startTime = System.nanoTime();
@@ -306,7 +284,7 @@ public class RegionUpdaterThread extends Thread {
     public static void imprimirElementos(List<Region> lista) {
 
         for (Region elemento : lista) {
-            Log.d("Consulta Lista", "Tipo: " + lista.get(lista.lastIndexOf(elemento)));
+            Log.d("Consulta Lista", "Tipo: " + nomeSimplesUltimoElemento(lista, lista.lastIndexOf(elemento)));
         }
     }
     public static <T> int buscarIndiceElemento(List<T> lista, T elemento) {

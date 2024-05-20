@@ -1,5 +1,7 @@
 package com.automacao.avancada31;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -33,6 +35,7 @@ public class CriptografiaAES extends Thread {
 
     @Override
     public void run() {
+
         try {
             if (criptografar) {
 
@@ -48,6 +51,8 @@ public class CriptografiaAES extends Thread {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
     }
 
     private static String criptografar(String texto) throws Exception {

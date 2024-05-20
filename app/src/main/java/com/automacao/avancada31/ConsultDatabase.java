@@ -1,18 +1,3 @@
-/**
- * Esta classe representa uma thread responsável por consultar o banco de dados Firebase para obter informações sobre as regiões armazenadas.
- * Ela implementa a lógica para verificar se uma nova região a ser adicionada já existe no banco de dados e se está muito próxima de outras regiões existentes.
- * Se a nova região não existir no banco de dados e não estiver muito próxima de outras regiões, inicia uma nova thread para atualizar as regiões.
- *
- * Principais funcionalidades:
- * - Consulta o banco de dados Firebase para obter informações sobre as regiões armazenadas.
- * - Verifica se uma nova região a ser adicionada já existe no banco de dados e se está muito próxima de outras regiões existentes.
- * - Inicia uma nova thread para atualizar as regiões, se necessário.
- * - Registra mensagens de log para monitorar o status da consulta ao banco de dados.
- *
- * Autor: Leonardo Monteiro
- * Data: 05/04/2024
- */
-
 
 package com.automacao.avancada31;
 
@@ -72,6 +57,7 @@ public class ConsultDatabase extends Thread {
         regioesRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                long startTime = System.nanoTime();
                 for (DataSnapshot childSnapshot : snapshot.getChildren()) {
                     try {
                         JsonConverter jsonConverter = new JsonConverter(childSnapshot.getValue(String.class),false);
@@ -90,13 +76,22 @@ public class ConsultDatabase extends Thread {
                     }
                 }
 
-                processarRegioes(regionsFromDatabase);
-                // Registra o tempo de término da verificação no banco
+                // Registra o tempo de término da conversão + criptografia
                 long endTime = System.nanoTime();
                 // Calcula o tempo decorrido em nanossegundos
                 long elapsedTime = endTime - startTime;
                 // Use o tempo decorrido conforme necessário, como registrá-lo em logs ou realizar outras ações
-                Log.d("Consulta Lista", "Tempo decorrido para verificar o banco " + elapsedTime + " nanossegundos");
+                Log.d("Consulta Lista", "Tempo decorrido para conversão + criptografia " + elapsedTime + " nanossegundos");
+
+
+                processarRegioes(regionsFromDatabase);
+
+                // Registra o tempo de término da verificação no banco
+                long endTime2 = System.nanoTime();
+                // Calcula o tempo decorrido em nanossegundos
+                long elapsedTime2 = endTime2 - startTime;
+                // Use o tempo decorrido conforme necessário, como registrá-lo em logs ou realizar outras ações
+                Log.d("Consulta Lista", "Tempo decorrido para verificar o banco " + elapsedTime2 + " nanossegundos");
             }
 
             @Override

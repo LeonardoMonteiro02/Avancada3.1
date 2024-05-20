@@ -100,6 +100,7 @@ public class FirebaseDataSaver extends Thread {
         }
         i=0;
         regions.clear(); // Clear list after successful saving
+
         Log.d(TAG, "Dados Salvos no Servidor!");
 
         // Registra o tempo de término para salvar no banco
